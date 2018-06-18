@@ -1,13 +1,15 @@
 package edu.sperek.vendingmachine.vending.machine.domain.enitities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 public enum Money {
 
-    DOLLAR(BigDecimal.ONE),
-    QUARTER(BigDecimal.valueOf(0.25)),
-    DIME(BigDecimal.valueOf(0.1)),
-    NICKEL(BigDecimal.valueOf(0.05));
+    @JsonProperty("dollar") DOLLAR(BigDecimal.ONE),
+    @JsonProperty("quarter") QUARTER(BigDecimal.valueOf(0.25)),
+    @JsonProperty("dime") DIME(BigDecimal.valueOf(0.1)),
+    @JsonProperty("nickel") NICKEL(BigDecimal.valueOf(0.05));
 
     Money(BigDecimal value) {
         this.value = value;

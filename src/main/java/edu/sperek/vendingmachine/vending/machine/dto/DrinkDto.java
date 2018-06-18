@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @EqualsAndHashCode
 public class DrinkDto {
+    private Long id;
     private String name;
     private BigDecimal price;
 }

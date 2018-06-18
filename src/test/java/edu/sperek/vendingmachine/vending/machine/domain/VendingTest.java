@@ -2,6 +2,7 @@ package edu.sperek.vendingmachine.vending.machine.domain;
 
 import edu.sperek.vendingmachine.vending.infrastructure.DrinkFactory;
 import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.enitities.DrinkOrder;
 import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
 import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -138,7 +140,7 @@ public class VendingTest {
         assertThat(actualCredit).isEqualTo(expectedCredit);
     }
 
-//    when I go to /return I will get dime, quarter and dollar and I can see i have credit of 0
+    //    when I go to /return I will get dime, quarter and dollar and I can see i have credit of 0
     @Test
     public final void credit_should_be_equal_zero_after_return_is_done() {
         //given
@@ -161,7 +163,8 @@ public class VendingTest {
         assertThat(actualCredit.compareTo(BigDecimal.ZERO)).isEqualTo(expectedCredit.compareTo(BigDecimal.ZERO));
         assertThat(returnedMoney).isEqualTo(expectedCoinsReturned);
     }
-//    when I go to /buy/1 and my credit is zero I can see "not enough credit to buy a drink"
+
+    //    when I go to /buy/1 and my credit is zero I can see "not enough credit to buy a drink"
     @Test
     public final void should_be_unable_to_buy_a_drink_with_credit_of_zero() throws NotEnoughCreditException {
         //given
@@ -175,7 +178,8 @@ public class VendingTest {
         assertThat(actualCredit).isEqualTo(expectedCredit);
         assertThat(throwable.getMessage()).isNotEmpty();
     }
-//    when I post to /insert/dollar I can see I have credit of 1
+
+    //    when I post to /insert/dollar I can see I have credit of 1
 //    when I go to /buy/1 I will receive Coco-rise and quarter and dime (0.35)
     @Test
     public final void should_buy_a_coco_rise_drink_and_get0_point_35_change_back() {
@@ -194,7 +198,8 @@ public class VendingTest {
         assertThat(actualChange.get(0)).isEqualTo(Money.QUARTER);
         assertThat(actualChange.get(1)).isEqualTo(Money.DIME);
     }
-//    when_I_post_to /insert/dollar and go to /buy/1 I can see "no more in stock" and I have credit of 1
+
+    //    when_I_post_to /insert/dollar and go to /buy/1 I can see "no more in stock" and I have credit of 1
     @Test
     public final void should_throw_no_more_in_stock_exception_when_no_more_in_stock() throws NoMoreInStockException {
         //given
@@ -204,7 +209,7 @@ public class VendingTest {
         vendingFacade.insert(dollar);
         vendingFacade.insert(dollar);
         vendingFacade.buyDrink(1L);
-        final Throwable throwable = catchThrowable(()-> vendingFacade.buyDrink(1L));
+        final Throwable throwable = catchThrowable(() -> vendingFacade.buyDrink(1L));
 
         //then
         final List<Drink> drinks = vendingFacade.getDrinks();
@@ -212,9 +217,10 @@ public class VendingTest {
         assertThat(drink.getAmount()).isEqualTo(0);
         assertThat(throwable.getMessage()).isEqualTo("No more in stock");
     }
-//    when I go to /buy/2 I will receive Panda-shake with no change
+
+    //    when I go to /buy/2 I will receive Panda-shake with no change
     @Test
-    public final void shouldBuyPandaShakeAngGetNoChange() {
+    public final void should_buy_panda_shake_ang_get_no_change() {
         //given
         final Money dollar = Money.DOLLAR;
 
@@ -230,15 +236,18 @@ public class VendingTest {
         assertThat(orderedDrink.getName()).isEqualTo(expectedDrinkName);
         assertThat(order.getChange()).isEmpty();
     }
-//    when I post to /service/add/ with new drink of id1, I will see drink has been added
+
+    //    when I post to /service/add/ with new drink of id1, I will see drink has been added
     @Test
-    public final void shouldRefillDrinks() {
+    public final void should_refill_drinks() {
         //given
         final List<Drink> drinksToRefill = Arrays.asList(createDrinks);
+        final List<DrinkDto> drinkDtos  =
+                Arrays.stream(createDrinks).map(Drink::dto).collect(Collectors.toList());
         final Integer cocoRiseAmount = drinksToRefill.get(0).getAmount();
         final Integer amountToAdd = 5;
         //when
-        vendingFacade.refillDrinks(drinksToRefill, amountToAdd);
+        vendingFacade.refillDrinks(drinkDtos, amountToAdd);
 
         //then
         final Drink actualCocoRiseDrink = vendingFacade.getDrinks().get(0);

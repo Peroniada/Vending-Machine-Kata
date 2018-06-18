@@ -45,6 +45,7 @@ public class Drink {
 
     public DrinkDto dto() {
         return DrinkDto.builder()
+                .id(this.id)
                 .name(this.name)
                 .price(this.price)
                 .build();

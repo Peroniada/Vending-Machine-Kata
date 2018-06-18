@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class VendingConfiguration {
 
+    @Bean
     VendingMachineFacade vendingFacade() {
         return vendingFacade(new InMemoryCreditRepository(), new InMemoryDrinksRepository());
     }
 
-    @Bean
     private VendingMachineFacade vendingFacade(final CreditRepository creditRepository, final DrinksRepository drinksRepository) {
         return new VendingMachineFacade(creditRepository, drinksRepository);
     }

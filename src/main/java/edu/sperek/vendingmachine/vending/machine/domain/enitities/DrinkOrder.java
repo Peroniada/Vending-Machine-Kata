@@ -1,4 +1,4 @@
-package edu.sperek.vendingmachine.vending.machine.domain;
+package edu.sperek.vendingmachine.vending.machine.domain.enitities;
 
 import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
 import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-class DrinkOrder {
+public class DrinkOrder {
     private final DrinkDto orderedDrink;
     private final List<Money> change;
 }

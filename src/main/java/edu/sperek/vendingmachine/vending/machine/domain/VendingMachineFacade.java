@@ -1,6 +1,7 @@
 package edu.sperek.vendingmachine.vending.machine.domain;
 
 import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.enitities.DrinkOrder;
 import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
 import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
 import edu.sperek.vendingmachine.vending.machine.ports.CreditRepository;
@@ -20,9 +21,9 @@ public class VendingMachineFacade {
         this.drinksRepository = drinksRepository;
     }
 
-    public void refillDrinks(final List<Drink> drinks, final Integer amount) {
-        for (final Drink drink: drinks) {
-        this.drinksRepository.refill(drink.getId(), amount);
+    public void refillDrinks(final List<DrinkDto> drinks, final Integer amount) {
+        for (final DrinkDto drink : drinks) {
+            this.drinksRepository.refill(drink.getId(), amount);
         }
     }
 
@@ -45,14 +46,13 @@ public class VendingMachineFacade {
 
     public DrinkOrder buyDrink(final Long drinkId) {
         final BigDecimal availableCredit = creditRepository.getCredit();
-        if(!isDrinkInStock(drinkId)) {
+        if (!isDrinkInStock(drinkId)) {
             final String message = "No more in stock";
             throw new NoMoreInStockException(message);
         }
         drinksRepository.subtractDrink(drinkId);
         final DrinkDto drink = drinksRepository.getDrink(drinkId).dto();
-        if(haveEnoughCredit(availableCredit, drink))
-        {
+        if (haveEnoughCredit(availableCredit, drink)) {
             final String message = "Not enough credit. You lack "
                     + drink.getPrice().subtract(availableCredit)
                     + "to buy this drink";
@@ -78,10 +78,10 @@ public class VendingMachineFacade {
 
         final List<Money> changeInCash = new ArrayList<>();
         BigDecimal remainingChange = change;
-        while(remainingChange.compareTo(BigDecimal.ZERO) > 0){
+        while (remainingChange.compareTo(BigDecimal.ZERO) > 0) {
             final Optional<Money> optionalMoney = getMoneySmallerThanChange(remainingChange);
 
-            if(optionalMoney.isPresent()) {
+            if (optionalMoney.isPresent()) {
                 final Money coin = optionalMoney.get();
                 remainingChange = remainingChange.subtract(coin.getValue());
                 changeInCash.add(coin);
@@ -94,8 +94,8 @@ public class VendingMachineFacade {
     private Optional<Money> getMoneySmallerThanChange(BigDecimal remainingChange) {
 
         return Arrays.stream(Money.values()).filter(coin -> {
-                    final BigDecimal coinValue = coin.getValue();
-                    return coinValue.compareTo(remainingChange) <= 0;
-                }).findFirst();
+            final BigDecimal coinValue = coin.getValue();
+            return coinValue.compareTo(remainingChange) <= 0;
+        }).findFirst();
     }
 }
