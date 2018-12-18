@@ -1,6 +1,6 @@
 package edu.sperek.vendingmachine.vending.infrastructure.rest.requests;
 
-import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefillMachineRequest {
-    private List<DrinkDto> drinks;
+    private List<Drink> drinks;
     private Integer amount;
 
 }

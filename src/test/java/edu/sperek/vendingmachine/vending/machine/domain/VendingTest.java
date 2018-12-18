@@ -1,9 +1,10 @@
 package edu.sperek.vendingmachine.vending.machine.domain;
 
+import edu.sperek.vendingmachine.vending.VendingConfiguration;
 import edu.sperek.vendingmachine.vending.infrastructure.DrinkFactory;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.DrinkOrder;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
 import org.junit.Test;
 
@@ -122,7 +123,7 @@ public class VendingTest {
 
     //    when I post to /insert/dollar I can see I have credit of 1.35
     @Test
-    public final void should_add_credit_of_1_point_35_when_quarter_and_dime_is_inserted() {
+    public final void should_add_credit_of_1_point_35_when_dollar_quarter_and_dime_is_inserted() {
         //given
         final Money dollar = Money.DOLLAR;
         final Money quarter = Money.QUARTER;
@@ -231,7 +232,7 @@ public class VendingTest {
 
         //then
 
-        final DrinkDto orderedDrink = order.getOrderedDrink();
+        final Drink orderedDrink = order.getOrderedDrink();
         final String expectedDrinkName = "Panda Shake";
         assertThat(orderedDrink.getName()).isEqualTo(expectedDrinkName);
         assertThat(order.getChange()).isEmpty();
@@ -247,7 +248,7 @@ public class VendingTest {
         final Integer cocoRiseAmount = drinksToRefill.get(0).getAmount();
         final Integer amountToAdd = 5;
         //when
-        vendingFacade.refillDrinks(drinkDtos, amountToAdd);
+        vendingFacade.refillDrinks(drinksToRefill, amountToAdd);
 
         //then
         final Drink actualCocoRiseDrink = vendingFacade.getDrinks().get(0);

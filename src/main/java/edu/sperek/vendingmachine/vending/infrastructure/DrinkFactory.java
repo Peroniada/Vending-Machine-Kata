@@ -1,6 +1,6 @@
 package edu.sperek.vendingmachine.vending.infrastructure;
 
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 
 import java.math.BigDecimal;
 

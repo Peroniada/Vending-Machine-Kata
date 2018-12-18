@@ -1,14 +1,14 @@
 package edu.sperek.vendingmachine.vending.infrastructure;
 
 import edu.sperek.vendingmachine.vending.infrastructure.exceptions.NoSuchDrinkOfGivenIdException;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import edu.sperek.vendingmachine.vending.machine.ports.DrinksRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class InMemoryDrinksRepository implements DrinksRepository {
+public class InMemoryDrinksRepository implements DrinksRepository<Drink, Long> {
 
     private final List<Drink> drinks;
 

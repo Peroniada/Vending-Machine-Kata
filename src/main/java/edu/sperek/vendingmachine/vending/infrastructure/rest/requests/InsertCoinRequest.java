@@ -1,6 +1,6 @@
 package edu.sperek.vendingmachine.vending.infrastructure.rest.requests;
 
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

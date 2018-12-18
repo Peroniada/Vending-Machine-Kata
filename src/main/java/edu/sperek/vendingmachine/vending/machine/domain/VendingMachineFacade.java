@@ -1,9 +1,8 @@
 package edu.sperek.vendingmachine.vending.machine.domain;
 
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.DrinkOrder;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
-import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 import edu.sperek.vendingmachine.vending.machine.ports.CreditRepository;
 import edu.sperek.vendingmachine.vending.machine.ports.DrinksRepository;
 
@@ -21,8 +20,8 @@ public class VendingMachineFacade {
         this.drinksRepository = drinksRepository;
     }
 
-    public void refillDrinks(final List<DrinkDto> drinks, final Integer amount) {
-        for (final DrinkDto drink : drinks) {
+    public void refillDrinks(final List<Drink> drinks, final Integer amount) {
+        for (final Drink drink : drinks) {
             this.drinksRepository.refill(drink.getId(), amount);
         }
     }
@@ -51,7 +50,7 @@ public class VendingMachineFacade {
             throw new NoMoreInStockException(message);
         }
         drinksRepository.subtractDrink(drinkId);
-        final DrinkDto drink = drinksRepository.getDrink(drinkId).dto();
+        final Drink drink = drinksRepository.getDrink(drinkId);
         if (haveEnoughCredit(availableCredit, drink)) {
             final String message = "Not enough credit. You lack "
                     + drink.getPrice().subtract(availableCredit)
@@ -61,7 +60,7 @@ public class VendingMachineFacade {
         return prepareOrder(drink, availableCredit);
     }
 
-    private boolean haveEnoughCredit(BigDecimal availableCredit, DrinkDto drink) {
+    private boolean haveEnoughCredit(BigDecimal availableCredit, Drink drink) {
         return availableCredit.compareTo(drink.getPrice()) < 0;
     }
 
@@ -69,7 +68,7 @@ public class VendingMachineFacade {
         return drinksRepository.getDrink(drinkId).getAmount() > 0;
     }
 
-    private DrinkOrder prepareOrder(final DrinkDto drink, final BigDecimal credit) {
+    private DrinkOrder prepareOrder(final Drink drink, final BigDecimal credit) {
         final BigDecimal change = credit.subtract(drink.getPrice());
         return new DrinkOrder(drink, prepareChange(change));
     }

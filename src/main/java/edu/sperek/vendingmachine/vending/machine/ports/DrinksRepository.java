@@ -1,15 +1,15 @@
 package edu.sperek.vendingmachine.vending.machine.ports;
 
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 
 import java.util.List;
 
-public interface DrinksRepository {
-    Drink getDrink(final Long drinkId);
+public interface DrinksRepository<Type, Id> {
+    Type getDrink(final Id drinkId);
 
-    void subtractDrink(final Long drinkId);
+    void subtractDrink(final Id drinkId);
 
-    void refill(final Long drinkId, final Integer amount);
+    void refill(final Id drinkId, final Integer amount);
 
-    List<Drink> getDrinks();
+    List<Type> getDrinks();
 }

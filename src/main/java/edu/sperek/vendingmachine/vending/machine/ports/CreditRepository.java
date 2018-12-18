@@ -1,9 +1,8 @@
 package edu.sperek.vendingmachine.vending.machine.ports;
 
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public interface CreditRepository {
     BigDecimal getCredit();

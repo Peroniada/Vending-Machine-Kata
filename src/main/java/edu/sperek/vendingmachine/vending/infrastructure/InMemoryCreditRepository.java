@@ -1,7 +1,7 @@
 package edu.sperek.vendingmachine.vending.infrastructure;
 
 import edu.sperek.vendingmachine.vending.machine.ports.CreditRepository;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 
 import java.math.BigDecimal;
 

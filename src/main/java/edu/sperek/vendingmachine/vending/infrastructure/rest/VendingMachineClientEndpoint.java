@@ -2,10 +2,10 @@ package edu.sperek.vendingmachine.vending.infrastructure.rest;
 
 
 import edu.sperek.vendingmachine.vending.infrastructure.rest.requests.InsertCoinRequest;
-import edu.sperek.vendingmachine.vending.machine.domain.application.VendingMachineClientService;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.DrinkOrder;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Money;
+import edu.sperek.vendingmachine.vending.machine.application.VendingMachineClientService;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
+import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

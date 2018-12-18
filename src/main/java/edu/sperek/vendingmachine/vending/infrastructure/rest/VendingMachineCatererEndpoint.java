@@ -1,8 +1,8 @@
 package edu.sperek.vendingmachine.vending.infrastructure.rest;
 
 import edu.sperek.vendingmachine.vending.infrastructure.rest.requests.RefillMachineRequest;
-import edu.sperek.vendingmachine.vending.machine.domain.application.VendingMachineCatererService;
-import edu.sperek.vendingmachine.vending.machine.domain.enitities.Drink;
+import edu.sperek.vendingmachine.vending.machine.application.VendingMachineCatererService;
+import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
