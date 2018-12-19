@@ -2,6 +2,7 @@ package edu.sperek.vendingmachine.vending.machine.domain;
 
 import edu.sperek.vendingmachine.vending.VendingConfiguration;
 import edu.sperek.vendingmachine.vending.infrastructure.DrinkFactory;
+import edu.sperek.vendingmachine.vending.infrastructure.InMemoryDrinksRepository;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
@@ -53,6 +54,7 @@ public class VendingTest {
      * */
 
     private VendingMachineFacade vendingFacade = new VendingConfiguration().vendingFacade();
+    private InMemoryDrinksRepository repository = new InMemoryDrinksRepository();
     private final Drink[] createDrinks = {
             DrinkFactory.cocoRise(1),
             DrinkFactory.pandaShake(3),
@@ -66,7 +68,7 @@ public class VendingTest {
         final List<Drink> drinks = Arrays.asList(createDrinks);
 
         //when
-        final List<Drink> getDrinksResult = vendingFacade.getDrinks();
+        final List<Drink> getDrinksResult = repository.getDrinks();
 
         //then
         assertThat(getDrinksResult).isEqualTo(drinks);
@@ -172,7 +174,8 @@ public class VendingTest {
         final BigDecimal expectedCredit = BigDecimal.ZERO;
 
         //when
-        final Throwable throwable = catchThrowable(() -> vendingFacade.buyDrink(1L));
+        final Drink drink = repository.getDrink(1L);
+        final Throwable throwable = catchThrowable(() -> vendingFacade.buyDrink(drink));
 
         //then
         final BigDecimal actualCredit = vendingFacade.getCredit();
@@ -190,7 +193,8 @@ public class VendingTest {
 
         //when
         vendingFacade.insert(dollar);
-        final DrinkOrder actualOrder = vendingFacade.buyDrink(1L);
+        final Drink drink = repository.getDrink(1L);
+        final DrinkOrder actualOrder = vendingFacade.buyDrink(drink);
 
         //then
         final String actualOrderDrinkName = actualOrder.getOrderedDrink().getName();
@@ -209,13 +213,14 @@ public class VendingTest {
         //when
         vendingFacade.insert(dollar);
         vendingFacade.insert(dollar);
-        vendingFacade.buyDrink(1L);
-        final Throwable throwable = catchThrowable(() -> vendingFacade.buyDrink(1L));
+        final Drink drink = repository.getDrink(1L);
+        vendingFacade.buyDrink(drink);
+        final Throwable throwable = catchThrowable(() -> vendingFacade.buyDrink(drink));
 
         //then
-        final List<Drink> drinks = vendingFacade.getDrinks();
-        final Drink drink = drinks.get(0);
-        assertThat(drink.getAmount()).isEqualTo(0);
+        final List<Drink> drinks = repository.getDrinks();
+        final Drink actualDrink = drinks.get(0);
+        assertThat(actualDrink.getAmount()).isEqualTo(0);
         assertThat(throwable.getMessage()).isEqualTo("No more in stock");
     }
 
@@ -228,7 +233,8 @@ public class VendingTest {
         //when
         vendingFacade.insert(dollar);
         final long drinkId = 2L;
-        final DrinkOrder order = vendingFacade.buyDrink(drinkId);
+        final Drink drink = repository.getDrink(drinkId);
+        final DrinkOrder order = vendingFacade.buyDrink(drink);
 
         //then
 
@@ -242,16 +248,14 @@ public class VendingTest {
     @Test
     public final void should_refill_drinks() {
         //given
-        final List<Drink> drinksToRefill = Arrays.asList(createDrinks);
-        final List<DrinkDto> drinkDtos  =
-                Arrays.stream(createDrinks).map(Drink::dto).collect(Collectors.toList());
+        final List<Drink> drinksToRefill = repository.getDrinks();
         final Integer cocoRiseAmount = drinksToRefill.get(0).getAmount();
         final Integer amountToAdd = 5;
         //when
         vendingFacade.refillDrinks(drinksToRefill, amountToAdd);
 
         //then
-        final Drink actualCocoRiseDrink = vendingFacade.getDrinks().get(0);
+        final Drink actualCocoRiseDrink = repository.getDrinks().get(0);
         assertThat(actualCocoRiseDrink.getAmount()).isEqualTo(cocoRiseAmount + amountToAdd);
     }
 }

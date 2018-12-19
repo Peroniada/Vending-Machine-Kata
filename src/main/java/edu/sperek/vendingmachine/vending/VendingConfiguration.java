@@ -17,6 +17,6 @@ public class VendingConfiguration {
     }
 
     private VendingMachineFacade vendingFacade(final CreditRepository creditRepository, final DrinksRepository drinksRepository) {
-        return new VendingMachineFacade(creditRepository, drinksRepository);
+        return new VendingMachineFacade(creditRepository);
     }
 }

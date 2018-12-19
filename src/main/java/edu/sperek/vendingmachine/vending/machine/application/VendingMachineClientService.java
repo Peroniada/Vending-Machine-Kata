@@ -4,6 +4,7 @@ import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
 import edu.sperek.vendingmachine.vending.machine.domain.VendingMachineFacade;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
+import edu.sperek.vendingmachine.vending.machine.ports.DrinksRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,9 +13,12 @@ import java.util.List;
 @Service
 public class VendingMachineClientService {
     private final VendingMachineFacade vendingFacade;
+    private DrinksRepository drinksRepository;
 
-    public VendingMachineClientService(VendingMachineFacade vendingFacade) {
+
+    public VendingMachineClientService(VendingMachineFacade vendingFacade, DrinksRepository drinksRepository) {
         this.vendingFacade = vendingFacade;
+        this.drinksRepository = drinksRepository;
     }
 
     public BigDecimal getCredit() {
@@ -22,7 +26,7 @@ public class VendingMachineClientService {
     }
 
     public List<Drink> getDrinks() {
-        return this.vendingFacade.getDrinks();
+        return this.drinksRepository.getDrinks();
     }
 
     public void insertMoney(final Money money) {
@@ -34,7 +38,8 @@ public class VendingMachineClientService {
     }
 
     public DrinkOrder buyDrink(final Long drinkId) {
-        return this.vendingFacade.buyDrink(drinkId);
+        final Drink drink = (Drink) this.drinksRepository.getDrink(drinkId);
+        return this.vendingFacade.buyDrink(drink);
     }
 
 

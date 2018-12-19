@@ -4,7 +4,6 @@ import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
 import edu.sperek.vendingmachine.vending.machine.ports.CreditRepository;
-import edu.sperek.vendingmachine.vending.machine.ports.DrinksRepository;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -13,22 +12,17 @@ import java.util.*;
 public class VendingMachineFacade {
 
     private final CreditRepository creditRepository;
-    private final DrinksRepository drinksRepository;
 
-    public VendingMachineFacade(CreditRepository creditRepository, DrinksRepository drinksRepository) {
+    public VendingMachineFacade(CreditRepository creditRepository) {
         this.creditRepository = creditRepository;
-        this.drinksRepository = drinksRepository;
     }
 
     public void refillDrinks(final List<Drink> drinks, final Integer amount) {
         for (final Drink drink : drinks) {
-            this.drinksRepository.refill(drink.getId(), amount);
+            drink.refill(amount);
         }
     }
 
-    public List<Drink> getDrinks() {
-        return drinksRepository.getDrinks();
-    }
 
     public BigDecimal getCredit() {
         return this.creditRepository.getCredit();
@@ -43,14 +37,13 @@ public class VendingMachineFacade {
         return prepareChange(this.creditRepository.returnMoney(credit));
     }
 
-    public DrinkOrder buyDrink(final Long drinkId) {
+    public DrinkOrder buyDrink(final Drink drink) {
         final BigDecimal availableCredit = creditRepository.getCredit();
-        if (!isDrinkInStock(drinkId)) {
+        if (!isDrinkInStock(drink)) {
             final String message = "No more in stock";
             throw new NoMoreInStockException(message);
         }
-        drinksRepository.subtractDrink(drinkId);
-        final Drink drink = drinksRepository.getDrink(drinkId);
+        drink.decreaseAmountByOne();
         if (haveEnoughCredit(availableCredit, drink)) {
             final String message = "Not enough credit. You lack "
                     + drink.getPrice().subtract(availableCredit)
@@ -64,8 +57,8 @@ public class VendingMachineFacade {
         return availableCredit.compareTo(drink.getPrice()) < 0;
     }
 
-    private boolean isDrinkInStock(Long drinkId) {
-        return drinksRepository.getDrink(drinkId).getAmount() > 0;
+    private boolean isDrinkInStock(Drink drink) {
+        return drink.getAmount() > 0;
     }
 
     private DrinkOrder prepareOrder(final Drink drink, final BigDecimal credit) {
