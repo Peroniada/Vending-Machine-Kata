@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Drink {
+public class DrinkPM {
     @Id
     @GeneratedValue
     Long id;
