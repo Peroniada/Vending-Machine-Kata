@@ -23,7 +23,7 @@ class VendingMachineCatererEndpoint {
     @PutMapping("/caterer/refill")
     public ResponseEntity<List<Drink>> refillDrinks(@RequestBody final RefillMachineRequest request) {
         this.vendingMachineCatererService.refillDrinks(request.getDrinks(), request.getAmount());
-//        final List<DrinkPM> drinks = this.vendingMachineCatererService.getDrinks();
+//        final List<JpaDrink> drinks = this.vendingMachineCatererService.getDrinks();
         final List<Drink> drinks = new ArrayList<>(); //TODO wez to napraw
         return new ResponseEntity<>(drinks, HttpStatus.ACCEPTED);
     }

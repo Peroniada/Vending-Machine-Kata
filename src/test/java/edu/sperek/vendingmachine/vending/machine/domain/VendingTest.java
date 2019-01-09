@@ -2,17 +2,15 @@ package edu.sperek.vendingmachine.vending.machine.domain;
 
 import edu.sperek.vendingmachine.vending.VendingConfiguration;
 import edu.sperek.vendingmachine.vending.infrastructure.DrinkFactory;
-import edu.sperek.vendingmachine.vending.infrastructure.InMemoryDrinksRepository;
+import edu.sperek.vendingmachine.vending.infrastructure.persistance.InMemoryDrinksRepository;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Drink;
 import edu.sperek.vendingmachine.vending.machine.domain.model.DrinkOrder;
 import edu.sperek.vendingmachine.vending.machine.domain.model.Money;
-import edu.sperek.vendingmachine.vending.machine.dto.DrinkDto;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -53,8 +51,8 @@ public class VendingTest {
      *
      * */
 
-    private VendingMachineFacade vendingFacade = new VendingConfiguration().vendingFacade();
     private InMemoryDrinksRepository repository = new InMemoryDrinksRepository();
+    private VendingMachineFacade vendingFacade = new VendingConfiguration(repository).vendingFacade();
     private final Drink[] createDrinks = {
             DrinkFactory.cocoRise(1),
             DrinkFactory.pandaShake(3),

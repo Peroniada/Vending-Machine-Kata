@@ -23,7 +23,6 @@ public class VendingMachineFacade {
         }
     }
 
-
     public BigDecimal getCredit() {
         return this.creditRepository.getCredit();
     }
@@ -53,11 +52,11 @@ public class VendingMachineFacade {
         return prepareOrder(drink, availableCredit);
     }
 
-    private boolean haveEnoughCredit(BigDecimal availableCredit, Drink drink) {
+    private boolean haveEnoughCredit(final BigDecimal availableCredit, Drink drink) {
         return availableCredit.compareTo(drink.getPrice()) < 0;
     }
 
-    private boolean isDrinkInStock(Drink drink) {
+    private boolean isDrinkInStock(final Drink drink) {
         return drink.getAmount() > 0;
     }
 
@@ -83,7 +82,7 @@ public class VendingMachineFacade {
         return changeInCash;
     }
 
-    private Optional<Money> getMoneySmallerThanChange(BigDecimal remainingChange) {
+    private Optional<Money> getMoneySmallerThanChange(final BigDecimal remainingChange) {
 
         return Arrays.stream(Money.values()).filter(coin -> {
             final BigDecimal coinValue = coin.getValue();
